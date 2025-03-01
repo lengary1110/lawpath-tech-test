@@ -54,6 +54,8 @@ Run tests using Jest and React Testing Library:
 yarn test
 ```
 
+The coverage for all files is 100%.
+![test-coverage](https://github.com/user-attachments/assets/cd8ab414-4590-45de-953d-4ac6187fb55f)
 
 ## GraphQL
 
