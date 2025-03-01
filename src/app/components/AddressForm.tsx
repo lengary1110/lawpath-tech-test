@@ -34,31 +34,29 @@ const AddressForm = () => {
     resolver: zodResolver(addressSchema),
   });
 
+  const handleValidationResult = (message: string, isValid: boolean) => {
+    setValidationResult(message);
+    toast({
+      title: UI_TEXT.messages.validationResult,
+      description: message,
+      status: isValid ? "success" : "error",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+  
   const onSubmit = async (formData: AddressFormData) => {
     try {
       const { data } = await validateAddress({ variables: formData });
-      const { isValid, message } = data.validateAddress;
-      setValidationResult(message);
-      toast({
-        title: UI_TEXT.messages.validationResult,
-        description: message,
-        status: isValid ? "success" : "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      handleValidationResult(data.validateAddress.message, data.validateAddress.isValid);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err || "An unexpected error occurred.");
       console.error("Validation Error:", err);
-      setValidationResult(errorMessage);
-      toast({
-        title: UI_TEXT.messages.error,
-        description: errorMessage,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      handleValidationResult(errorMessage, false);
     }
   };
+
+  const validationColor = validationResult?.includes("valid") ? "green.500" : "red.500";
 
   return (
     <Box
@@ -81,6 +79,7 @@ const AddressForm = () => {
               id="postcode"
               {...register("postcode")}
               placeholder={UI_TEXT.placeholders.postcode}
+              data-testid="postcode-input"
             />
             <FormErrorMessage>{errors.postcode?.message}</FormErrorMessage>
           </FormControl>
@@ -91,6 +90,7 @@ const AddressForm = () => {
               id="suburb"
               {...register("suburb")}
               placeholder={UI_TEXT.placeholders.suburb}
+              data-testid="suburb-input"
             />
             <FormErrorMessage>{errors.suburb?.message}</FormErrorMessage>
           </FormControl>
@@ -101,6 +101,7 @@ const AddressForm = () => {
               id="state"
               {...register("state")}
               placeholder={UI_TEXT.placeholders.state}
+              data-testid="state-select"
             >
               {Object.entries(AU_STATES).map(([abbr]) => (
                 <option key={abbr} value={abbr}>
@@ -115,7 +116,9 @@ const AddressForm = () => {
             type="submit"
             colorScheme="blue"
             width="full"
-            disabled={loading}
+            isLoading={loading}
+            loadingText={UI_TEXT.button.validating}
+            data-testid="submit-button"
           >
             {UI_TEXT.button.validate}
           </Button>
@@ -123,9 +126,8 @@ const AddressForm = () => {
           {validationResult && !loading && (
             <Text
               aria-live="polite"
-              color={
-                validationResult.includes("valid") ? "green.500" : "red.500"
-              }
+              color={validationColor}
+              data-testid="validation-message"
             >
               {validationResult}
             </Text>

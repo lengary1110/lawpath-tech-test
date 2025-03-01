@@ -22,6 +22,7 @@ export const UI_TEXT = {
   },
   button: {
     validate: "Validate Address",
+    validating: "Validating...",
   },
   messages: {
     validationResult: "Validation Result",
