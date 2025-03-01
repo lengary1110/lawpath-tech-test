@@ -1,4 +1,4 @@
-import { AU_STATES } from "../components/AddressForm";
+import { AU_STATES } from "../../components/constants";
 
 const API_URL =
   "https://gavg8gilmf.execute-api.ap-southeast-2.amazonaws.com/staging/postcode/search.json";

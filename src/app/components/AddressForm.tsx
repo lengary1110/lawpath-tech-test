@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useValidateAddress } from "../hooks/useValidateAddress";
+import { useValidateAddress } from "../graphql/client/useValidateAddress";
 import {
   Box,
   Button,
@@ -17,38 +17,11 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
+import { addressSchema } from "./validationSchema";
+import { AU_STATES } from "./constants";
 
-export const AU_STATES: Record<string, string> = {
-  ACT: "Australian Capital Territory",
-  NSW: "New South Wales",
-  NT: "Northern Territory",
-  QLD: "Queensland",
-  SA: "South Australia",
-  TAS: "Tasmania",
-  VIC: "Victoria",
-  WA: "Western Australia",
-};
 
-const schema = z.object({
-  postcode: z
-    .string()
-    .regex(/^\d{4}$/, "Postcode must be exactly 4 digits")
-    .refine((val) => parseInt(val, 10) >= 200 && parseInt(val, 10) <= 9999, {
-      message: "Postcode must be a valid Australian postcode (0200-9999)",
-    }),
-  suburb: z
-    .string()
-    .min(2, "Suburb is required")
-    .max(100, "Suburb name too long"),
-  state: z
-    .string()
-    .toUpperCase()
-    .refine((val) => Object.keys(AU_STATES).includes(val), {
-      message: `State must be one of ${Object.keys(AU_STATES).join(", ")}`,
-    }),
-});
-
-type AddressFormData = z.infer<typeof schema>;
+type AddressFormData = z.infer<typeof addressSchema>;
 
 const AddressForm = () => {
   const [validationResult, setValidationResult] = useState<string | null>(null);
@@ -59,7 +32,7 @@ const AddressForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<AddressFormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(addressSchema),
   });
 
   const onSubmit = async (formData: AddressFormData) => {
