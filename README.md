@@ -14,6 +14,7 @@ This project is a Next.js application designed to handle address validation via 
 - **Validation**: Zod
 - **Form Handling**: React Hook Form
 - **UI Library**: Chakra UI
+- **Styling**: CSS Modules (`module.css`)
 - **Testing**: Jest, React Testing Library
 - **Linting**: ESLint
 - **Package Manager**: Yarn
