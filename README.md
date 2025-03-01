@@ -58,6 +58,9 @@ yarn test
 The coverage for all files is 100%.
 ![test-coverage](https://github.com/user-attachments/assets/cd8ab414-4590-45de-953d-4ac6187fb55f)
 
+## A11y
+![A11y](https://github.com/user-attachments/assets/6cbec740-4be4-4464-baae-a2956b9d908e)
+
 ## GraphQL
 
 The project includes a GraphQL API for address validation.
