@@ -147,7 +147,7 @@ describe("AddressForm", () => {
 
       fireEvent.click(screen.getByTestId("submit-button"));
 
-      expect(await screen.findByTestId("validation-message")).toHaveAttribute("aria-live", "polite");
+      expect(await screen.findByTestId("validation-message")).toHaveAttribute("aria-live", "assertive");
     });
   });
 });

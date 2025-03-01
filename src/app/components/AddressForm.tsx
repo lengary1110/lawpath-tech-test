@@ -80,6 +80,7 @@ const AddressForm = () => {
               {...register("postcode")}
               placeholder={UI_TEXT.placeholders.postcode}
               data-testid="postcode-input"
+              aria-label={`Enter your postcode. Example: 2000 for Sydney.`}
             />
             <FormErrorMessage>{errors.postcode?.message}</FormErrorMessage>
           </FormControl>
@@ -91,6 +92,7 @@ const AddressForm = () => {
               {...register("suburb")}
               placeholder={UI_TEXT.placeholders.suburb}
               data-testid="suburb-input"
+              aria-label={`Enter your suburb name. Example: Melbourne, Brisbane, Perth.`}
             />
             <FormErrorMessage>{errors.suburb?.message}</FormErrorMessage>
           </FormControl>
@@ -101,6 +103,9 @@ const AddressForm = () => {
               id="state"
               {...register("state")}
               placeholder={UI_TEXT.placeholders.state}
+              aria-label={`Select your state from the list. Available states include ${Object.entries(AU_STATES)
+                .map(([abbr, fullName]) => `${fullName} (${abbr})`)
+                .join(", ")}.`}
               data-testid="state-select"
             >
               {Object.entries(AU_STATES).map(([abbr]) => (
@@ -119,15 +124,18 @@ const AddressForm = () => {
             isLoading={loading}
             loadingText={UI_TEXT.button.validating}
             data-testid="submit-button"
+            aria-label="Submit the form to validate your address"
           >
             {UI_TEXT.button.validate}
           </Button>
           {/* Validation Message */}
           {validationResult && !loading && (
             <Text
-              aria-live="polite"
+              aria-live="assertive"
               color={validationColor}
               data-testid="validation-message"
+              aria-label={`Address validation result: ${validationResult}`}
+              tabIndex={0}
             >
               {validationResult}
             </Text>
