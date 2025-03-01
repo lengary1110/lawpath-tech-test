@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lawpath Tech Test
 
-## Getting Started
+This repository contains the solution for the Lawpath technical test, built using Next.js and TypeScript.
 
-First, run the development server:
+## Project Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This project is a Next.js application designed to handle address validation via GraphQL APIs. It includes form validation, API integrations, and testing setups to ensure reliability and maintainability.
+
+## Tech Stack
+
+- **Framework**: Next.js
+- **Programming Language**: TypeScript
+- **State Management**: Apollo Client
+- **Validation**: Zod
+- **Form Handling**: React Hook Form
+- **UI Library**: Chakra UI
+- **Testing**: Jest, React Testing Library
+- **Linting**: ESLint
+- **Package Manager**: Yarn
+
+## Installation
+
+To set up and run the project locally, follow these steps:
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/lengary1110/lawpath-tech-test.git
+   cd lawpath-tech-test
+   ```
+
+2. Install dependencies:
+
+   ```sh
+   yarn install
+   ```
+
+3. Start the development server:
+
+   ```sh
+   yarn dev
+   ```
+
+## Usage
+
+- Navigate to `http://localhost:3000/` to use the app.
+- Enter an address in the form and submit to validate it against the API.
+
+## Testing
+
+Run tests using Jest and React Testing Library:
+
+```sh
+yarn test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## GraphQL
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The project includes a GraphQL API for address validation.
 
-## Learn More
+- **API Endpoint**: `http://localhost:3000/api/graphql`
+- **Apollo Client Setup**: Configured in `lib/apolloClient.ts`
 
-To learn more about Next.js, take a look at the following resources:
+## Future Improvements
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Expand GraphQL Queries and Mutations for Additional Features
+- Implement Debounced API Calls to Optimize Performance
+- Implement caching strategies for API calls
+- Suburb Recommendation Search After Inputting Postcode
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
