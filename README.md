@@ -59,7 +59,7 @@ The coverage for all files is 100%.
 ![test-coverage](https://github.com/user-attachments/assets/cd8ab414-4590-45de-953d-4ac6187fb55f)
 
 ## A11y
-![A11y](https://github.com/user-attachments/assets/6cbec740-4be4-4464-baae-a2956b9d908e)
+![a11y](https://github.com/user-attachments/assets/80813ac2-8444-4dfa-a6c4-9e2869335730)
 
 ## GraphQL
 
@@ -72,6 +72,5 @@ The project includes a GraphQL API for address validation.
 
 - Expand GraphQL Queries and Mutations for Additional Features
 - Implement Debounced API Calls to Optimize Performance
-- Implement caching strategies for API calls
-- Suburb Recommendation Search After Inputting Postcode
+- Suburb Recommendation Search after Inputting Postcode
 
