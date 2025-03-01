@@ -36,19 +36,8 @@ const AddressForm = () => {
 
   const onSubmit = async (formData: AddressFormData) => {
     try {
-      const { data, error } = await validateAddress({ variables: formData });
-
-      if (error) {
-        console.error("GraphQL Error:", error);
-        throw new Error(error.message || "GraphQL request failed.");
-      }
-
-      if (!data?.validateAddress) {
-        throw new Error("Invalid API response.");
-      }
-
+      const { data } = await validateAddress({ variables: formData });
       const { isValid, message } = data.validateAddress;
-
       setValidationResult(message);
       toast({
         title: UI_TEXT.messages.validationResult,
@@ -58,12 +47,7 @@ const AddressForm = () => {
         isClosable: true,
       });
     } catch (err) {
-      let errorMessage = "An unexpected error occurred.";
-      if (err instanceof Error) {
-        errorMessage = err.message;
-      } else if (typeof err === "string") {
-        errorMessage = err;
-      }
+      const errorMessage = err instanceof Error ? err.message : String(err || "An unexpected error occurred.");
       console.error("Validation Error:", err);
       setValidationResult(errorMessage);
       toast({
