@@ -18,14 +18,23 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-const AU_STATES = ["ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"];
+export const AU_STATES: Record<string, string> = {
+  ACT: "Australian Capital Territory",
+  NSW: "New South Wales",
+  NT: "Northern Territory",
+  QLD: "Queensland",
+  SA: "South Australia",
+  TAS: "Tasmania",
+  VIC: "Victoria",
+  WA: "Western Australia",
+};
 
 const schema = z.object({
   postcode: z
     .string()
     .regex(/^\d{4}$/, "Postcode must be exactly 4 digits")
     .refine((val) => parseInt(val, 10) >= 200 && parseInt(val, 10) <= 9999, {
-      message: "Postcode must be a valid Australian postcode (200-9999)",
+      message: "Postcode must be a valid Australian postcode (0200-9999)",
     }),
   suburb: z
     .string()
@@ -34,8 +43,8 @@ const schema = z.object({
   state: z
     .string()
     .toUpperCase()
-    .refine((val) => AU_STATES.includes(val), {
-      message: "State must be one of ACT, NSW, NT, QLD, SA, TAS, VIC, WA",
+    .refine((val) => Object.keys(AU_STATES).includes(val), {
+      message: `State must be one of ${Object.keys(AU_STATES).join(", ")}`,
     }),
 });
 
@@ -55,24 +64,39 @@ const AddressForm = () => {
 
   const onSubmit = async (formData: AddressFormData) => {
     try {
-      const { data } = await validateAddress({ variables: formData });
-      const validationMessage = data?.validateAddress.message || "Unknown error occurred";
-      const isValid = data?.validateAddress.isValid;
-      setValidationResult(validationMessage);
+      const { data, error } = await validateAddress({ variables: formData });
+  
+      if (error) {
+        console.error("GraphQL Error:", error);
+        throw new Error(error.message || "GraphQL request failed.");
+      }
+  
+      if (!data?.validateAddress) {
+        throw new Error("Invalid API response.");
+      }
+  
+      const { isValid, message } = data.validateAddress;
+  
+      setValidationResult(message);
       toast({
         title: "Validation Result",
-        description: validationMessage,
+        description: message,
         status: isValid ? "success" : "error",
         duration: 3000,
         isClosable: true,
       });
-    // TODO: remove this lint
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      setValidationResult("An error occurred while validating the address.");
+      let errorMessage = "An unexpected error occurred.";
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      } else if (typeof err === "string") {
+        errorMessage = err;
+      }
+      console.error("Validation Error:", err);
+      setValidationResult(errorMessage);
       toast({
         title: "Error",
-        description: "An error occurred while validating the address.",
+        description: errorMessage,
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -99,37 +123,35 @@ const AddressForm = () => {
             <Input {...register("postcode")} placeholder="Enter postcode" />
             <FormErrorMessage>{errors.postcode?.message}</FormErrorMessage>
           </FormControl>
-
           {/* Suburb Input*/}
           <FormControl isInvalid={!!errors.suburb}>
             <FormLabel>Suburb</FormLabel>
             <Input {...register("suburb")} placeholder="Enter suburb" />
             <FormErrorMessage>{errors.suburb?.message}</FormErrorMessage>
           </FormControl>
-
           {/* State Input*/}
           <FormControl isInvalid={!!errors.state}>
             <FormLabel>State</FormLabel>
             <Select {...register("state")} placeholder="Select State">
-              <option value="VIC">VIC</option>
-              <option value="NSW">NSW</option>
-              <option value="QLD">QLD</option>
-              <option value="WA">WA</option>
-              <option value="SA">SA</option>
-              <option value="TAS">TAS</option>
-              <option value="NT">NT</option>
-              <option value="ACT">ACT</option>
-            </Select>
+                {Object.entries(AU_STATES).map(([abbr]) => (
+                  <option key={abbr} value={abbr}>
+                    {abbr}
+                  </option>
+                ))}
+              </Select>
             <FormErrorMessage>{errors.state?.message}</FormErrorMessage>
           </FormControl>
-
           {/* Submit Button */}
-          <Button type="submit" colorScheme="blue" width="full" disabled={loading}>
+          <Button
+            type="submit"
+            colorScheme="blue"
+            width="full"
+            disabled={loading}
+          >
             Validate Address
           </Button>
-
           {/* Validation Message */}
-          {validationResult && (
+          {validationResult && !loading && (
             <Text
               color={
                 validationResult.includes("valid") ? "green.500" : "red.500"

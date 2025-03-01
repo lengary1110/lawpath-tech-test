@@ -1,3 +1,5 @@
+import { AU_STATES } from "../components/AddressForm";
+
 const API_URL =
   "https://gavg8gilmf.execute-api.ap-southeast-2.amazonaws.com/staging/postcode/search.json";
 const AUTH_TOKEN = "7710a8c5-ccd1-160f-70cf03e8-b2bbaf01";
@@ -50,7 +52,7 @@ export const resolvers = {
         if (localities.length === 0) {
           return {
             isValid: false,
-            message: `Postcode "${postcode}" is invalid.`,
+            message: `Postcode "${postcode}" is invalid`,
           };
         }
 
@@ -62,7 +64,7 @@ export const resolvers = {
         if (!matchedSuburb) {
           return {
             isValid: false,
-            message: `The postcode ${postcode} does not match the suburb "${suburb}".`,
+            message: `The postcode ${postcode} does not match the suburb ${suburb}`,
           };
         }
 
@@ -70,7 +72,7 @@ export const resolvers = {
         if (state && matchedSuburb.state !== state) {
           return {
             isValid: false,
-            message: `The suburb ${suburb} does not exist in the state (${state}).`, // TODO：implement full error message
+            message: `The suburb "${suburb}" does not exist in the state ${AU_STATES[state]} (${state})`,
           };
         }
 
