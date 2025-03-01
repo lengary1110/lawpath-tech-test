@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { validateAddress } from  "./actions";
+import { useValidateAddress } from "../hooks/useValidateAddress";
 import {
   Box,
   Button,
@@ -41,8 +41,9 @@ const schema = z.object({
 
 type AddressFormData = z.infer<typeof schema>;
 
-export const AddressForm = () => {
+const AddressForm = () => {
   const [validationResult, setValidationResult] = useState<string | null>(null);
+  const [validateAddress, { loading }] = useValidateAddress();
   const toast = useToast();
   const {
     register,
@@ -52,20 +53,33 @@ export const AddressForm = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: AddressFormData) => {
-    const message = await validateAddress(
-      data.postcode,
-      data.suburb,
-      data.state
-    );
-    setValidationResult(message);
-    toast({
-      title: message,
-      status: message.includes("valid") ? "success" : "error",
-      duration: 3000,
-      isClosable: true,
-    });
+  const onSubmit = async (formData: AddressFormData) => {
+    try {
+      const { data } = await validateAddress({ variables: formData });
+      const validationMessage = data?.validateAddress.message || "Unknown error occurred";
+      const isValid = data?.validateAddress.isValid;
+      setValidationResult(validationMessage);
+      toast({
+        title: "Validation Result",
+        description: validationMessage,
+        status: isValid ? "success" : "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    // TODO: remove this lint
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
+      setValidationResult("An error occurred while validating the address.");
+      toast({
+        title: "Error",
+        description: "An error occurred while validating the address.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
+  
 
   return (
     <Box
@@ -110,7 +124,7 @@ export const AddressForm = () => {
           </FormControl>
 
           {/* Submit Button */}
-          <Button type="submit" colorScheme="blue" width="full">
+          <Button type="submit" colorScheme="blue" width="full" disabled={loading}>
             Validate Address
           </Button>
 
@@ -129,3 +143,5 @@ export const AddressForm = () => {
     </Box>
   );
 };
+
+export default AddressForm;
