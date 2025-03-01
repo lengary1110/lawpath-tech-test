@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AU_STATES } from "./constants";
+import { AU_STATES } from "../constants/constants";
 
 
 export const addressSchema = z.object({

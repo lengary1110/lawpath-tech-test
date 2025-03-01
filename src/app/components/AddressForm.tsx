@@ -17,9 +17,8 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { addressSchema } from "./validationSchema";
-import { AU_STATES } from "./constants";
-
+import { addressSchema } from "../constants/validationSchema";
+import { AU_STATES, UI_TEXT } from "../constants/constants";
 
 type AddressFormData = z.infer<typeof addressSchema>;
 
@@ -38,21 +37,21 @@ const AddressForm = () => {
   const onSubmit = async (formData: AddressFormData) => {
     try {
       const { data, error } = await validateAddress({ variables: formData });
-  
+
       if (error) {
         console.error("GraphQL Error:", error);
         throw new Error(error.message || "GraphQL request failed.");
       }
-  
+
       if (!data?.validateAddress) {
         throw new Error("Invalid API response.");
       }
-  
+
       const { isValid, message } = data.validateAddress;
-  
+
       setValidationResult(message);
       toast({
-        title: "Validation Result",
+        title: UI_TEXT.messages.validationResult,
         description: message,
         status: isValid ? "success" : "error",
         duration: 3000,
@@ -68,7 +67,7 @@ const AddressForm = () => {
       console.error("Validation Error:", err);
       setValidationResult(errorMessage);
       toast({
-        title: "Error",
+        title: UI_TEXT.messages.error,
         description: errorMessage,
         status: "error",
         duration: 3000,
@@ -76,7 +75,6 @@ const AddressForm = () => {
       });
     }
   };
-  
 
   return (
     <Box
@@ -92,26 +90,40 @@ const AddressForm = () => {
         <VStack spacing={4} align="stretch">
           {/* Postcode Input*/}
           <FormControl isInvalid={!!errors.postcode}>
-            <FormLabel>Postcode</FormLabel>
-            <Input {...register("postcode")} placeholder="Enter postcode" />
+            <FormLabel htmlFor="postcode">
+              {UI_TEXT.formLabels.postcode}
+            </FormLabel>
+            <Input
+              id="postcode"
+              {...register("postcode")}
+              placeholder={UI_TEXT.placeholders.postcode}
+            />
             <FormErrorMessage>{errors.postcode?.message}</FormErrorMessage>
           </FormControl>
           {/* Suburb Input*/}
           <FormControl isInvalid={!!errors.suburb}>
-            <FormLabel>Suburb</FormLabel>
-            <Input {...register("suburb")} placeholder="Enter suburb" />
+            <FormLabel htmlFor="suburb">{UI_TEXT.formLabels.suburb}</FormLabel>
+            <Input
+              id="suburb"
+              {...register("suburb")}
+              placeholder={UI_TEXT.placeholders.suburb}
+            />
             <FormErrorMessage>{errors.suburb?.message}</FormErrorMessage>
           </FormControl>
           {/* State Input*/}
           <FormControl isInvalid={!!errors.state}>
-            <FormLabel>State</FormLabel>
-            <Select {...register("state")} placeholder="Select State">
-                {Object.entries(AU_STATES).map(([abbr]) => (
-                  <option key={abbr} value={abbr}>
-                    {abbr}
-                  </option>
-                ))}
-              </Select>
+            <FormLabel htmlFor="state">{UI_TEXT.formLabels.state}</FormLabel>
+            <Select
+              id="state"
+              {...register("state")}
+              placeholder={UI_TEXT.placeholders.state}
+            >
+              {Object.entries(AU_STATES).map(([abbr]) => (
+                <option key={abbr} value={abbr}>
+                  {abbr}
+                </option>
+              ))}
+            </Select>
             <FormErrorMessage>{errors.state?.message}</FormErrorMessage>
           </FormControl>
           {/* Submit Button */}
@@ -121,11 +133,12 @@ const AddressForm = () => {
             width="full"
             disabled={loading}
           >
-            Validate Address
+            {UI_TEXT.button.validate}
           </Button>
           {/* Validation Message */}
           {validationResult && !loading && (
             <Text
+              aria-live="polite"
               color={
                 validationResult.includes("valid") ? "green.500" : "red.500"
               }
