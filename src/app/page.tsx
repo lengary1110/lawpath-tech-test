@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import AddressForm from "./components/AddressForm";
+import AddressForm from "../app/components/AddressForm/AddressForm";
 
 export default function Home() {
   return (

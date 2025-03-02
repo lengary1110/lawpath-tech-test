@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useValidateAddress } from "../graphql/client/useValidateAddress";
+import { useValidateAddress } from "../../graphql/client/useValidateAddress";
 import {
   Box,
   Button,
@@ -17,8 +17,10 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { addressSchema } from "../constants/validationSchema";
-import { AU_STATES, UI_TEXT } from "../constants/constants";
+import { addressSchema } from "../../constants/validationSchema";
+import { AU_STATES, UI_TEXT } from "../../constants/constants";
+import ClientOnlyMap from "../Map/ClientOnlyMap";
+import { getStateAbbreviation } from "../../utils/functions";
 
 type AddressFormData = z.infer<typeof addressSchema>;
 
@@ -29,6 +31,7 @@ const AddressForm = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<AddressFormData>({
     resolver: zodResolver(addressSchema),
@@ -44,32 +47,57 @@ const AddressForm = () => {
       isClosable: true,
     });
   };
-  
+
   const onSubmit = async (formData: AddressFormData) => {
     try {
       const { data } = await validateAddress({ variables: formData });
-      handleValidationResult(data.validateAddress.message, data.validateAddress.isValid);
+      handleValidationResult(
+        data.validateAddress.message,
+        data.validateAddress.isValid
+      );
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : String(err || "An unexpected error occurred.");
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : String(err || "An unexpected error occurred.");
       console.error("Validation Error:", err);
       handleValidationResult(errorMessage, false);
     }
   };
 
-  const validationColor = validationResult?.includes("valid") ? "green.500" : "red.500";
+  const validationColor = validationResult?.includes("valid")
+    ? "green.500"
+    : "red.500";
+
+  const handleLocationSelect = (
+    postcode: string,
+    suburb: string,
+    state: string
+  ) => {
+    setValue("postcode", postcode);
+    setValue("suburb", suburb);
+    setValue("state", getStateAbbreviation(state) || "");
+  };
 
   return (
     <Box
       p={6}
-      maxW="400px"
+      maxW="500px"
       mx="auto"
-      mt={8}
+      mt={2}
       borderWidth={1}
       borderRadius="lg"
       boxShadow="md"
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack spacing={4} align="stretch">
+          {/* Map */}
+          <Box position="relative">
+            <ClientOnlyMap onLocationSelect={handleLocationSelect} />
+            <Text fontSize="sm" color="gray.500" mb={2}>
+              {UI_TEXT.mapHint}
+            </Text>
+          </Box>
           {/* Postcode Input*/}
           <FormControl isInvalid={!!errors.postcode}>
             <FormLabel htmlFor="postcode">
@@ -103,7 +131,9 @@ const AddressForm = () => {
               id="state"
               {...register("state")}
               placeholder={UI_TEXT.placeholders.state}
-              aria-label={`Select your state from the list. Available states include ${Object.entries(AU_STATES)
+              aria-label={`Select your state from the list. Available states include ${Object.entries(
+                AU_STATES
+              )
                 .map(([abbr, fullName]) => `${fullName} (${abbr})`)
                 .join(", ")}.`}
               data-testid="state-select"

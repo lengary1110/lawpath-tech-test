@@ -1,11 +1,11 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useValidateAddress } from "../../graphql/client/useValidateAddress";
+import { useValidateAddress } from "../../../graphql/client/useValidateAddress";
 import AddressForm from "../AddressForm";
 import { UI_TEXT } from "@/app/constants/constants";
 
 // Mock GraphQL Hook
-jest.mock("../../graphql/client/useValidateAddress");
+jest.mock("../../../graphql/client/useValidateAddress");
 
 const mockValidateAddress = useValidateAddress as jest.Mock;
 

@@ -28,4 +28,5 @@ export const UI_TEXT = {
     validationResult: "Validation Result",
     error: "Error",
   },
+  mapHint: "📍 Click on the map to auto-fill postcode, suburb, and state.",
 };
