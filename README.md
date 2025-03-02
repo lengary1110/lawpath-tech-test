@@ -1,12 +1,17 @@
-# Lawpath Tech Test
+# 🚀 Lawpath Tech Test
 
 This repository contains the solution for the Lawpath technical test, built using Next.js and TypeScript.
 
-## Project Overview
+## 📋 Project Overview
 
 This project is a Next.js application designed to handle address validation via GraphQL APIs. It includes form validation, API integrations, and testing setups to ensure reliability and maintainability.
 
-## Tech Stack
+## 🌟 Highlights
+- **Interactive Map Integration**: Click on the map to auto-fill postcode, suburb, and state.
+- **Comprehensive Test Coverage**: Ensures reliability with 100% test coverage.
+- **Accessibility (A11y) Focused**: Implements best practices for an inclusive user experience.
+
+## 🛠️ Tech Stack
 
 - **Framework**: Next.js
 - **Programming Language**: TypeScript
@@ -15,11 +20,13 @@ This project is a Next.js application designed to handle address validation via 
 - **Form Handling**: React Hook Form
 - **UI Library**: Chakra UI
 - **Styling**: CSS Modules (`module.css`)
+- **Mapping**: React Leaflet
+- **APIs**: Nominatim OpenStreetMap Reverse Geocoding API, Australia Post API
 - **Testing**: Jest, React Testing Library
 - **Linting**: ESLint
 - **Package Manager**: Yarn
 
-## Installation
+## 🔧 Installation
 
 To set up and run the project locally, follow these steps:
 
@@ -37,17 +44,17 @@ To set up and run the project locally, follow these steps:
    ```
 
 3. Start the development server:
-
+ 
    ```sh
    yarn dev
    ```
 
-## Usage
+## 📖 Usage
 
 - Navigate to `http://localhost:3000/` to use the app.
 - Enter an address in the form and submit to validate it against the API.
 
-## Testing
+## ✅ Testing
 
 Run tests using Jest and React Testing Library:
 
@@ -58,19 +65,18 @@ yarn test
 The coverage for all files is 100%.
 ![test-coverage](https://github.com/user-attachments/assets/cd8ab414-4590-45de-953d-4ac6187fb55f)
 
-## A11y
+##🧑‍🦯 A11y
 ![a11y](https://github.com/user-attachments/assets/80813ac2-8444-4dfa-a6c4-9e2869335730)
 
-## GraphQL
+## 🔗 GraphQL
 
 The project includes a GraphQL API for address validation.
 
 - **API Endpoint**: `http://localhost:3000/api/graphql`
 - **Apollo Client Setup**: Configured in `lib/apolloClient.ts`
 
-## Future Improvements
+## 🔮 Future Improvements
 
 - Expand GraphQL Queries and Mutations for Additional Features
 - Implement Debounced API Calls to Optimize Performance
 - Suburb Recommendation Search after Inputting Postcode
-
