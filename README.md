@@ -65,8 +65,8 @@ yarn test
 The coverage for all files is 100%.
 ![test-coverage](https://github.com/user-attachments/assets/cd8ab414-4590-45de-953d-4ac6187fb55f)
 
-##🧑‍🦯 A11y
-![a11y](https://github.com/user-attachments/assets/80813ac2-8444-4dfa-a6c4-9e2869335730)
+## 🧑‍🦯 A11y
+![a11y](https://github.com/user-attachments/assets/1f1b6b70-5d6a-4d52-9c2f-9af0d0c2428d)
 
 ## 🔗 GraphQL
 
